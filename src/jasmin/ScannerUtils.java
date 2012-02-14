@@ -9,51 +9,36 @@ package jasmin;
 abstract class ScannerUtils {
 
     //
-    // Converts a string of a given radix to an int or a long
-    // (uses smallest format that will hold the number)
-    //
-    public static Number convertInt(String str, int radix)
-                throws NumberFormatException
-    {
-        long x = Long.parseLong(str, radix);
-        if (x <= (long)Integer.MAX_VALUE && x >= (long)Integer.MIN_VALUE) {
-            return new Integer((int)x);
-        }
-        return new Long(x);
-    }
-
-    //
     // Converts a string to a number (int, float, long, or double).
     // (uses smallest format that will hold the number)
     //
-    public static Number convertNumber(String str)
-                throws NumberFormatException
-    {
-        if(str.startsWith("+")) {
-            return new Integer(str.substring(1,str.length()));
-        }
-        if (str.startsWith("0x")) {
-            // base 16 integer
-            return (convertInt(str.substring(2), 16));
-        } else if (str.indexOf('.') != -1) {
-            // make a double
-            Double dc = new Double(str);
-            // if number have suffix 'd' force double value
-            // thanks to JD Brennan
-            if(!str.endsWith("d")) {
-                double x = dc.doubleValue();
-
-                // see if it will fit into a float...
-                if (x <= (double)Float.MAX_VALUE && x >= (float)Float.MIN_VALUE) {
-                    // bug fix here thanks to Peter Chubb (replaced int->float)
-                    return new Float((float)x);
-                }
-                // if not, return a double
+    public static Number convertNumber(String str) throws NumberFormatException {
+        str = str.toUpperCase();
+        if (str.startsWith("0X")) {// hex
+            switch (str.charAt(str.length() - 1)) {
+            case 'D':
+                return Double.longBitsToDouble(Long.parseLong(str.substring(2, str.length() - 1), 16));
+            case 'L':
+                return Long.parseLong(str.substring(2, str.length() - 1), 16);
+            case 'F':
+                return Float.intBitsToFloat(Integer.parseInt(str.substring(2, str.length() - 1), 16));
+            default:
+                return Integer.parseInt(str.substring(2), 16);
             }
-            return dc;
         } else {
-            // assume long or int in base 10
-            return (convertInt(str, 10));
+            switch (str.charAt(str.length() - 1)) {
+            case 'D':
+                return Double.parseDouble(str.substring(0, str.length() - 1));
+            case 'L':
+                return Long.parseLong(str.substring(0, str.length() - 1));
+            case 'F':
+                return Float.parseFloat(str.substring(0, str.length() - 1));
+            default:
+                if (str.indexOf('.') >= 0) {
+                    return Double.parseDouble(str);
+                }
+                return Integer.parseInt(str);
+            }
         }
     }
 
@@ -151,6 +136,8 @@ abstract class ScannerUtils {
 }
 
 /* --- Revision History ---------------------------------------------------
+--- Panxiaobo, Feb 14 2012
+    'D'/'F'/'L' in real constant, force double/float/long mode.
 --- Iouri Kharon, May 07 2010
     'd' in real constant, force double mode.
 */
