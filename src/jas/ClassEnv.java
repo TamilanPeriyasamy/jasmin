@@ -146,7 +146,11 @@ public class ClassEnv implements RuntimeConstants
 				// Class hierarchy/access
     out.writeShort(class_access);
     out.writeShort(getCPIndex(this_class));
-    out.writeShort(getCPIndex(super_class));
+    if (super_class == null) {
+       out.writeShort(0);
+    } else {
+       out.writeShort(getCPIndex(super_class));
+    }
                                 // interfaces
     out.writeShort(interfaces.size());
     for (Enumeration e = interfaces.elements(); e.hasMoreElements();)
@@ -369,3 +373,7 @@ public class ClassEnv implements RuntimeConstants
     version_lo = version_low;
   }
 }
+/* --- Revision History ---------------------------------------------------
+--- Panxiaobo, Feb 15 2012
+    Added add support to add null .super
+*/

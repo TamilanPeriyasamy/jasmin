@@ -266,6 +266,8 @@ access_item ::=
 super_spec ::=
     DSUPER classname:name SEP
         {: classFile.setSuperClass(name.str_val); :}
+    | 
+    /* empty */
 ;
 
 // ---- Implements specification
