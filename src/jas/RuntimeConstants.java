@@ -7,8 +7,8 @@ public interface RuntimeConstants {
 
     // top-level constants
     public static final int JAVA_MAGIC = -889275714;
-    public static final int JAVA_VERSION = 45;
-    public static final int JAVA_MINOR_VERSION = 3;
+    public static final int JAVA_VERSION = 49;
+    public static final int JAVA_MINOR_VERSION = 0;
 
     // constant pool entry types
     public static final int CONSTANT_UTF8 = 1;
@@ -331,3 +331,8 @@ public interface RuntimeConstants {
         3, 5, 3, 3, 2, 3, 1, 1, 3, 3, 1, 1, 0, 4, 3, 3, 5, 5, 1
     };
 }
+
+/* --- Revision History ---------------------------------------------------
+--- Panxiaobo, Feb 15 2012
+    Change default version to 49.0 (JDK5)
+*/
