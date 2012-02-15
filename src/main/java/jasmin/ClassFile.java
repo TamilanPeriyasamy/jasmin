@@ -68,7 +68,7 @@ public class ClassFile {
     Vector switch_vec;
     int low_value;
     int high_value;
-
+    boolean isInterface;
 
     static final String BGN_METHOD = "jasmin_reserved_bgnmethod:";
     static final String END_METHOD = "jasmin_reserved_endmethod:";
@@ -149,6 +149,7 @@ public class ClassFile {
         class_env.setClass(new ClassCP(name));
         class_env.setClassAccess(acc);
         class_header = true;
+		isInterface = 0 != (acc & RuntimeConstants.ACC_INTERFACE);
     }
 
     //
@@ -385,6 +386,11 @@ public class ClassFile {
     // called by the .method directive to start the definition for a method
     //
     void newMethod(String name, String descriptor, int access) {
+        if (isInterface) {
+            // access |= ~(RuntimeConstants.ACC_PRIVATE | RuntimeConstants.ACC_PROTECTED);
+            // access &= RuntimeConstants.ACC_PUBLIC;
+            access = RuntimeConstants.ACC_PUBLIC | RuntimeConstants.ACC_ABSTRACT;
+        }
         // set method state variables
         labels      = new Hashtable();
         code        = null;

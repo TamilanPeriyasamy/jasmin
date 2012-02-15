@@ -207,7 +207,6 @@ class_spec ::=
     DINTERFACE access:a classname:name SEP
         {: classFile.setClass(name.str_val,
                 (short)(a.int_val |
-                        RuntimeConstants.ACC_SUPER |
                         RuntimeConstants.ACC_INTERFACE)); :}
 ;
 
@@ -474,7 +473,8 @@ inner_spec ::=
     |
     DINNER INTERFACE access:a inner_name:n inner_inner:i inner_outer:o SEP
         {: classFile.addInner((short)(a.int_val |
-                              RuntimeConstants.ACC_INTERFACE),
+                              RuntimeConstants.ACC_INTERFACE |
+                              RuntimeConstants.ACC_ABSTRACT),
                                 n.str_val, i.str_val, o.str_val); :}
 ;
 
