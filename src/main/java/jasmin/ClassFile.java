@@ -666,7 +666,7 @@ public class ClassFile {
             String split[] = ScannerUtils.splitClassMethodSignature(val);
             bufferInsn(new InvokeinterfaceInsn(
                          new InterfaceCP(split[0], split[1],
-                         split[2]), nargs));
+                         split[2]), ScannerUtils.getArgumentsAndReturnSizes(split[2]) >> 2));
 
         } else if (insn.args.equals("marray")) {
             bufferInsn(new MultiarrayInsn(new ClassCP(val), nargs));
@@ -689,6 +689,11 @@ public class ClassFile {
             String split[] = ScannerUtils.splitClassMethodSignature(val);
             bufferInsn(new Insn(insn.opcode,
                          new MethodCP(split[0], split[1], split[2])));
+        } else if (insn.args.equals("interface")) {
+            String split[] = ScannerUtils.splitClassMethodSignature(val);
+            bufferInsn(new InvokeinterfaceInsn(
+                    new InterfaceCP(split[0], split[1],
+                    split[2]), ScannerUtils.getArgumentsAndReturnSizes(split[2]) >> 2));
         } else if (name.startsWith("ldc")) {
             bufferInsn(new Insn(insn.opcode, new ClassCP(val)));
         } else if (insn.args.equals("atype")) {
