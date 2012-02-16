@@ -5,7 +5,7 @@
 	<artifactId>jasmin</artifactId>
 	<packaging>jar</packaging>
 	<name>Jasmin</name>
-	<version>p2.5-SNAPSHOT</version>
+	<version>p2.5</version>
 
 	<build>
 		<plugins>
