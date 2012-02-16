@@ -590,10 +590,8 @@ public class ClassFile {
 
         if (insn.args.equalsIgnoreCase("i")) {
             bufferInsn(new Insn(insn.opcode, val, insn.args.charAt(0) == 'I'));
-        } else if (insn.args.equals("constant")) {
+        } else if (name.startsWith("ldc")) {
             bufferInsn(new Insn(insn.opcode, new IntegerCP(val)));
-        } else if (insn.args.equals("bigconstant")) {
-            bufferInsn(new Insn(insn.opcode, new LongCP(val)));
         } else if (insn.args.equals("label")) {
             plant(name, String.valueOf(val));        // the target is not signed
                                                      // assume it is a label
@@ -613,19 +611,17 @@ public class ClassFile {
 
         if (insn.args.equalsIgnoreCase("i") && (val instanceof Integer)) {
             bufferInsn(new Insn(insn.opcode, val.intValue(), insn.args.charAt(0) == 'I'));
-        } else if (insn.args.equals("constant")) {
-            if (val instanceof Integer || val instanceof Long) {
+        } else if (name.startsWith("ldc")) {
+            if (val instanceof Integer) {
                 bufferInsn(new Insn(insn.opcode,
                              new IntegerCP(val.intValue())));
-            } else if (val instanceof Float || val instanceof Double) {
+            } else if (val instanceof Float) {
                 bufferInsn(new Insn(insn.opcode,
                              new FloatCP(val.floatValue())));
-            }
-        } else if (insn.args.equals("bigconstant")) {
-            if (val instanceof Integer || val instanceof Long) {
+            } else if (val instanceof Long) {
                 bufferInsn(new Insn(insn.opcode,
                              new LongCP(val.longValue())));
-            } else if (val instanceof Float || val instanceof Double) {
+            } else if (val instanceof Double) {
                 bufferInsn(new Insn(insn.opcode,
                              new DoubleCP(val.doubleValue())));
             }
@@ -642,7 +638,7 @@ public class ClassFile {
         autoNumber();
         flushInsnBuffer();
 
-        if (insn.args.equals("constant")) {
+        if (name.startsWith("ldc")) {
             bufferInsn(new Insn(insn.opcode, new StringCP(val)));
         } else {
             throw new jasError("Bad arguments for instruction " + name);
@@ -687,7 +683,7 @@ public class ClassFile {
             String split[] = ScannerUtils.splitClassMethodSignature(val);
             bufferInsn(new Insn(insn.opcode,
                          new MethodCP(split[0], split[1], split[2])));
-        } else if (insn.args.equals("constant")) {
+        } else if (name.startsWith("ldc")) {
             bufferInsn(new Insn(insn.opcode, new ClassCP(val)));
         } else if (insn.args.equals("atype")) {
             int atype = 0;

@@ -16,15 +16,27 @@ abstract class ScannerUtils {
         str = str.toUpperCase();
         if (str.startsWith("0X")) {// hex
             switch (str.charAt(str.length() - 1)) {
-            case 'D':
-                return Double.longBitsToDouble(Long.parseLong(str.substring(2, str.length() - 1), 16));
             case 'L':
                 return Long.parseLong(str.substring(2, str.length() - 1), 16);
-            case 'F':
-                return Float.intBitsToFloat(Integer.parseInt(str.substring(2, str.length() - 1), 16));
             default:
                 return Integer.parseInt(str.substring(2), 16);
             }
+        }
+        if (str.startsWith("0N") || str.startsWith("0P")) {
+            if (str.equals("0NAN_F")) {
+                return Float.NaN;
+            } else if (str.equals("0NAN_D")) {
+                return Double.NaN;
+            } else if (str.equals("0NEG_INFI_F")) {
+                return Float.NEGATIVE_INFINITY;
+            } else if (str.equals("0NEG_INFI_D")) {
+                return Double.NEGATIVE_INFINITY;
+            } else if (str.equals("0POS_INFI_F")) {
+                return Float.POSITIVE_INFINITY;
+            } else if (str.equals("0POS_INFI_D")) {
+                return Double.POSITIVE_INFINITY;
+            }
+            throw new IllegalArgumentException("malformed number : " + str);
         } else {
             switch (str.charAt(str.length() - 1)) {
             case 'D':
@@ -136,6 +148,8 @@ abstract class ScannerUtils {
 }
 
 /* --- Revision History ---------------------------------------------------
+--- Panxiaobo, Feb 15 2012
+    add support to ldc infinity and Nan
 --- Panxiaobo, Feb 14 2012
     'D'/'F'/'L' in real constant, force double/float/long mode.
 --- Iouri Kharon, May 07 2010
