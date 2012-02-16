@@ -101,7 +101,7 @@ non terminal symbol
        complex_instruction, defmethod, directive, endmethod, field_list,
        field_spec, fields, instruction, implements, implements_list, implements_spec,
        jas_file, label, limit_expr, lookup,
-       lookup_args, lookup_default, lookup_entry, lookup_list, method_list,
+       lookup_args, lookup_default, lookup_entry, lookup_list, lookup_items, method_list,
        method_spec, methods, set_expr, simple_instruction, source_spec,
        statement, statements, stmnt, super_spec, table, table_args, line_expr,
        table_default, table_entry, table_list, throws_expr, var_expr, bytecode_spec,
@@ -791,7 +791,9 @@ lookup_args ::= SEP     // no arguments to lookupswitch
         {: classFile.newLookupswitch(); :}
 ;
 
-lookup_list ::= lookup_list lookup_entry | lookup_entry ;
+lookup_list ::= lookup_items | /* empty */ ;
+
+lookup_items ::= lookup_items lookup_entry | lookup_entry ;
 
 lookup_entry ::=
     Int:i COLON Word:w SEP
