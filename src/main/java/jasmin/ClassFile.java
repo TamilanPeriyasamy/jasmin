@@ -133,12 +133,42 @@ public class ClassFile {
     // called by the .bytecode directive
     //
     void setVersion(Number version) {
+        // int V1_1 = 3 << 16 | 45;
+        // int V1_2 = 0 << 16 | 46;
+        // int V1_3 = 0 << 16 | 47;
+        // int V1_4 = 0 << 16 | 48;
+        // int V1_5 = 0 << 16 | 49;
+        // int V1_6 = 0 << 16 | 50;
+        // int V1_7 = 0 << 16 | 51;
         String str = version.toString();
-        int idx = str.indexOf(".");
-        if(!(version instanceof Float) || (idx == -1))
-            report_error("invalid bytecode version number : " + str);
-        class_env.setVersion(Short.parseShort(str.substring(0,idx)),
-                             Short.parseShort(str.substring(idx+1,str.length())));
+        String key = "[" + str + "]";
+        if ("[5][1.5][5.0][49.0]".contains(key)) {
+            this.class_env.setVersion((short) 49, (short) 0);
+        } else if ("[6][1.6][6.0][50.0]".contains(key)) {
+            this.class_env.setVersion((short) 50, (short) 0);
+        } else if ("[7][1.7][7.0][51.0]".contains(key)) {
+            this.class_env.setVersion((short) 51, (short) 0);
+        } else if ("[4][1.4][4.0][48.0]".contains(key)) {
+            this.class_env.setVersion((short) 48, (short) 0);
+        } else if ("[3][1.3][3.0][47.0]".contains(key)) {
+            this.class_env.setVersion((short) 47, (short) 0);
+        } else if ("[2][1.2][2.0][46.0]".contains(key)) {
+            this.class_env.setVersion((short) 46, (short) 0);
+        } else if ("[1][1.1][1.0][45.3]".contains(key)) {
+            this.class_env.setVersion((short) 45, (short) 3);
+        } else {
+            int idx = str.indexOf(".");
+            try {
+                if (idx > 0) {
+                    class_env.setVersion(Short.parseShort(str.substring(0, idx)),
+                            Short.parseShort(str.substring(idx + 1, str.length())));
+                } else {
+                    class_env.setVersion(version.shortValue(), (short) 0);
+                }
+            } catch (Exception ex) {
+                report_error("invalid bytecode version number : " + str);
+            }
+        }
     }
 
     //

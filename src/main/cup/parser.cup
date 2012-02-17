@@ -181,6 +181,9 @@ bytecode_spec ::=
     DBYTECODE Num:n SEP
         {: classFile.setVersion(n.num_val); :}
     |
+    DBYTECODE Int:n SEP
+        {: classFile.setVersion(n.int_val); :}
+    |
     /* nothing */
 ;
 
